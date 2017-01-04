@@ -33,6 +33,14 @@
   line-height: 30px;
   padding-left: 10px;
 }
+ 
+      #map, #pano {
+
+        height: 50%;
+
+      }
+    
+
 
     </style>
 
@@ -127,13 +135,14 @@ var map;
 var markers = [];
 
 function initMap() {
-	nchu.lat = school[0].lat;
-	nchu.lng = school[0].lng;
+	nchu.lat = school[1].lat;
+	nchu.lng = school[1].lng;
   myMap = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
+    zoom: 16,
     center: nchu,
   });
-
+	addView(nchu);
+  
   var infoWindow = new google.maps.InfoWindow({map: myMap});
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -152,12 +161,17 @@ function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
+  	
 }
+
+
+
 function add(x){
 deleteMarkers();
 nchu.lat = school[x].lat;
 nchu.lng = school[x].lng;
 	addMarker(nchu);
+	addView(nchu);
 }
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
@@ -165,6 +179,20 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
 }
+function addView(viewPlace){
+        panorama = new google.maps.StreetViewPanorama(
+		document.getElementById('pano'), {
+        position: viewPlace,
+        pov: {
+			heading:195.44470068237538,
+			pitch:11.369987975856844
+        }
+      });
+		myMap.setStreetView(panorama);
+		}
+  
+
+
 // Adds a marker to the map and push to the array.
 function addMarker(location) {
   var marker = new google.maps.Marker({
@@ -235,6 +263,6 @@ function listing(){
 		</ul>
     </div>
     <div id="map"></div>
-    <p>Click on the map to add markers.</p>
+   <div id="pano"></div>
   </body>
 </html>
